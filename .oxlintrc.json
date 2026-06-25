@@ -1,0 +1,10 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "rules": {
+    "eqeqeq": "error",
+    "no-var": "error",
+    "prefer-const": "error",
+    "no-useless-escape": "warn"
+  },
+  "ignorePatterns": ["drizzle/", ".svelte-kit/", "build/"]
+}
