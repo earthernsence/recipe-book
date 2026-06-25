@@ -48,6 +48,8 @@
   },
   "dependencies": {
     "@auth/sveltekit": "^1.11.2",
+    "@fontsource-variable/dm-sans": "^5.2.8",
+    "@fontsource/dm-serif-display": "^5.2.8",
     "@libsql/client": "^0.17.4",
     "drizzle-orm": "^0.45.2"
   }
