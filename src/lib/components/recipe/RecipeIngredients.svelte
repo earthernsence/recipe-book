@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Ingredient, ingredients } from "$lib/server/db/schema";
+  import type { Ingredient } from "$lib/server/db/schema";
   import { formatAmount } from "$lib/utils/utils_formatting";
 
   const MULTIPLIERS: Array<{ label: string; value: number }> = [
