@@ -1,0 +1,48 @@
+<script lang="ts">
+  import type { Ingredient, ingredients } from "$lib/server/db/schema";
+  import { formatAmount } from "$lib/utils/utils_formatting";
+
+  const MULTIPLIERS: Array<{ label: string; value: number }> = [
+    { label: "¼×", value: 0.25 },
+    { label: "½×", value: 0.5 },
+    { label: "1×", value: 1 },
+    { label: "2×", value: 2 },
+    { label: "3×", value: 3 }
+  ];
+
+  const { ingredients }: { ingredients: Array<Ingredient> } = $props();
+
+  let multiplier = $state(1);
+
+  const scaled = $derived(
+    ingredients.map(i => ({
+      ...i,
+      amount: formatAmount(i.amount * multiplier)
+    }))
+  );
+</script>
+
+<div class="flex flex-col gap-4">
+  <div class="flex flex-row gap-2">
+    {#each MULTIPLIERS as m (m.value)}
+      <button
+        class="px-3 py-1 rounded-md text-sm border transition-colors {multiplier === m.value
+          ? "bg-primary text-primary-foreground border-primary"
+          : "bg-card text-foreground border-border hover:bg-muted"}"
+        onclick={() => (multiplier = m.value)}
+      >
+        {m.label}
+      </button>
+    {/each}
+  </div>
+  <ul class="flex flex-col gap-1">
+    {#each scaled as ingredient (ingredient.id)}
+      <li class="flex flex-row gap-2 text-sm">
+        <span class="font-semibold w-16 shrink-0 text-right">
+          {ingredient.amount}{ingredient.unit ? ` ${ingredient.unit}` : ""}
+        </span>
+        <span>{ingredient.name}</span>
+      </li>
+    {/each}
+  </ul>
+</div>

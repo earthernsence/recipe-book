@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { ChefHat, Plus } from "@lucide/svelte";
-  import Button from "./ui/button/button.svelte";
+  import { ChefHat } from "@lucide/svelte";
+
+  import AddRecipeButton from "./recipe/AddRecipeButton.svelte";
+
+  import { resolve } from "$app/paths";
 </script>
 
-<div class="z-50 bg-background fixed top-0 flex flex-row items-center w-full p-6 border-b shadow-xs">
-  <a href="/" class="font-semibold flex flex-row gap-x-2 text-center mr-6 md:w-auto">
+<header class="z-50 bg-background fixed top-0 flex flex-row items-center w-full p-6 border-b shadow-xs justify-between">
+  <a href={resolve("/")} class="font-serif flex flex-row gap-x-2 text-center mr-6 md:w-auto items-center">
     <ChefHat />
-    Recipes
+    <span class="text-2xl">Recipes</span>
   </a>
-  <Button class="flex md:justify-end">
-    <Plus />
-    <div class="mr-1">Add recipe...</div>
-  </Button>
-</div>
+  <AddRecipeButton />
+</header>

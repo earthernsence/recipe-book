@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { integer, real, sqliteTable, text, primaryKey } from "drizzle-orm/sqlite-core";
 
 // Recipe schema
@@ -8,9 +8,10 @@ export const recipes = sqliteTable("recipes", {
   title: text("title").notNull(),
   description: text("description"),
   cuisineType: text("cuisine_type"),
-  mealType: text("meal_type"), // like breakfast, lunch, dinner, etc...
+  mealType: text("meal_type", { enum: ["breakfast", "lunch", "dinner", "dessert", "snack", "other"] }).notNull(),
   prepTimeMinutes: integer("prep_time_minutes"),
   cookTimeMinutes: integer("cook_time_minutes"),
+  servings: integer("servings"), // in terms of people, probably?
   notes: text("notes"), // stored as md, rendered properly on the site
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
@@ -70,3 +71,40 @@ export type Recipe = typeof recipes.$inferSelect;
 export type Ingredient = typeof ingredients.$inferSelect;
 export type Step = typeof steps.$inferSelect;
 export type Tag = typeof tags.$inferSelect;
+
+// Create relation attachments
+
+export const recipesRelations = relations(recipes, ({ many }) => ({
+  ingredients: many(ingredients),
+  steps: many(steps),
+  recipeTags: many(recipeTags)
+}));
+
+export const ingredientsRelations = relations(ingredients, ({ one }) => ({
+  recipe: one(recipes, {
+    fields: [ingredients.recipeId],
+    references: [recipes.id]
+  })
+}));
+
+export const stepsRelations = relations(steps, ({ one }) => ({
+  recipe: one(recipes, {
+    fields: [steps.recipeId],
+    references: [recipes.id]
+  })
+}));
+
+export const recipeTagsRelations = relations(recipeTags, ({ one }) => ({
+  recipe: one(recipes, {
+    fields: [recipeTags.recipeId],
+    references: [recipes.id]
+  }),
+  tag: one(tags, {
+    fields: [recipeTags.tagId],
+    references: [tags.id]
+  })
+}));
+
+export const tagsRelations = relations(tags, ({ many }) => ({
+  recipeTags: many(recipeTags)
+}));

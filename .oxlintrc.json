@@ -6,5 +6,5 @@
     "prefer-const": "error",
     "no-useless-escape": "warn"
   },
-  "ignorePatterns": ["drizzle/", ".svelte-kit/", "build/"]
+  "ignorePatterns": ["drizzle/", ".svelte-kit/", "build/", "src/lib/components/ui"]
 }
