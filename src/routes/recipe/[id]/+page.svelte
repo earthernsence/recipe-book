@@ -18,7 +18,7 @@
   };
 
   const { data }: PageProps = $props();
-  const { recipe } = data;
+  const { recipe } = $derived(data);
 
   const stripeColour = $derived(MEAL_TYPE_COLOURS[recipe.mealType] ?? MEAL_TYPE_COLOURS.other);
 </script>
