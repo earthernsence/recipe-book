@@ -1,24 +1,19 @@
 import { db } from "$lib/server/db";
 import type { RecipeCardData } from "$lib/types";
-import { asc } from "drizzle-orm";
 import type { PageServerLoad } from "./$types";
-import { tags } from "$lib/server/db/schema";
 
 export const load: PageServerLoad = async () => {
-  const [rawRecipes, allTags] = await Promise.all([
-    db.query.recipes.findMany({
-      with: {
-        recipeTags: {
-          with: {
-            tag: true
-          }
-        },
-        ingredients: true
+  const rawRecipes = await db.query.recipes.findMany({
+    with: {
+      recipeTags: {
+        with: {
+          tag: true
+        }
       },
-      orderBy: (recipes, { asc }) => [asc(recipes.title)]
-    }),
-    db.select().from(tags).orderBy(asc(tags.name))
-  ]);
+      ingredients: true
+    },
+    orderBy: (recipes, { asc }) => [asc(recipes.title)]
+  });
 
   const recipes: Array<RecipeCardData> = rawRecipes.map(recipe => ({
     ...recipe,
@@ -26,7 +21,7 @@ export const load: PageServerLoad = async () => {
     ingredientCount: recipe.ingredients.length
   }));
 
-  return { recipes, allTags };
+  return { recipes };
 };
 
 // export async function load(): Promise<{ recipes: Array<RecipeCardData> }> {

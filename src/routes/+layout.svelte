@@ -4,8 +4,11 @@
   import favicon from "$lib/assets/favicon.svg";
   import Footer from "$lib/components/Footer.svelte";
   import Header from "$lib/components/Header.svelte";
+  import AddRecipeModal from "$lib/components/recipe/create/AddRecipeModal.svelte";
 
-  const { children } = $props();
+  const { children, data } = $props();
+
+  let modalOpen = $state<boolean>(false);
 </script>
 
 <svelte:head>
@@ -14,8 +17,9 @@
   <link rel="icon" href={favicon} />
 </svelte:head>
 
-<Header />
+<Header session={data.session} onAddRecipe={() => (modalOpen = true)} />
 <main class="pb-16">
   {@render children()}
 </main>
 <Footer />
+<AddRecipeModal bind:open={modalOpen} allTags={data.allTags} />

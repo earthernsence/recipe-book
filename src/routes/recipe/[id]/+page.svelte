@@ -47,28 +47,28 @@
 
   <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 items-start">
     <!-- Index card panel -->
-    <aside class="rounded-lg border shadow-sm bg-card overflow-hidden sticky top-24">
+    <aside class="rounded-lg border shadow-sm bg-card overflow-hidden md:sticky top-24">
       <div class="h-2 w-full {stripeColour}"></div>
       <div class="p-6 flex flex-col gap-6">
         <div class="flex flex-col gap-2 text-sm">
-        {#if recipe.prepTimeMinutes}
-          <div class="flex justify-between">
-            <span class="text-muted-foreground">Prep</span>
-            <span class="font-medium">{recipe.prepTimeMinutes} min</span>
-          </div>
-        {/if}
-        {#if recipe.cookTimeMinutes}
-          <div class="flex justify-between">
-            <span class="text-muted-foreground">Cook</span>
-            <span class="font-medium">{recipe.cookTimeMinutes} min</span>
-          </div>
-        {/if}
-        {#if recipe.servings}
-          <div class="flex justify-between">
-            <span class="text-muted-foreground">Servings</span>
-            <span class="font-medium">{recipe.servings} people</span>
-          </div>
-        {/if}
+          {#if recipe.prepTimeMinutes}
+            <div class="flex justify-between">
+              <span class="text-muted-foreground">Prep</span>
+              <span class="font-medium">{recipe.prepTimeMinutes} min</span>
+            </div>
+          {/if}
+          {#if recipe.cookTimeMinutes}
+            <div class="flex justify-between">
+              <span class="text-muted-foreground">Cook</span>
+              <span class="font-medium">{recipe.cookTimeMinutes} min</span>
+            </div>
+          {/if}
+          {#if recipe.servings}
+            <div class="flex justify-between">
+              <span class="text-muted-foreground">Servings</span>
+              <span class="font-medium">{recipe.servings} people</span>
+            </div>
+          {/if}
         </div>
 
         <hr class="border-border" />

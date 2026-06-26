@@ -27,8 +27,8 @@
     {#each MULTIPLIERS as m (m.value)}
       <button
         class="px-3 py-1 rounded-md text-sm border transition-colors {multiplier === m.value
-          ? "bg-primary text-primary-foreground border-primary"
-          : "bg-card text-foreground border-border hover:bg-muted"}"
+          ? 'bg-primary text-primary-foreground border-primary'
+          : 'bg-card text-foreground border-border hover:bg-muted'}"
         onclick={() => (multiplier = m.value)}
       >
         {m.label}

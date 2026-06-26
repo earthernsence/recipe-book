@@ -45,7 +45,7 @@
 </script>
 
 <div class="flex flex-col h-screen mb-auto pt-24 px-6 mx-auto max-w-6xl">
-  <div class="flex flex-row gap-8">
+  <div class="flex flex-row gap-8 mb-4">
     <input
       type="text"
       placeholder="Search recipes..."
