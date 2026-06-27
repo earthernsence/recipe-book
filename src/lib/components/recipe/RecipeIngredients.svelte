@@ -10,9 +10,8 @@
     { label: "3×", value: 3 }
   ];
 
-  const { ingredients }: { ingredients: Array<Ingredient> } = $props();
-
-  let multiplier = $state(1);
+  // oxlint-disable-next-line prefer-const
+  let { ingredients, multiplier = $bindable(1) }: { ingredients: Array<Ingredient>; multiplier: number } = $props();
 
   const scaled = $derived(
     ingredients.map(i => ({

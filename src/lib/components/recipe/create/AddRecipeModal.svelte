@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { SvelteSet } from "svelte/reactivity";
+
   import { Button } from "$lib/components/ui/button";
   import * as Dialog from "$lib/components/ui/dialog";
   import type { Tag } from "$lib/server/db/schema";
@@ -31,7 +33,7 @@
   let servings = $state<number | null>(null);
   let ingredients = $state<Array<DraftIngredient>>([]);
   let steps = $state<Array<DraftStep>>([]);
-  let selectedTagIds = $state(new Set<number>());
+  let selectedTagIds = new SvelteSet<number>();
   let notes = $state<string>("");
   let submitting = $state(false);
   let submitError = $state<string | null>(null);
@@ -48,7 +50,7 @@
     servings = null;
     ingredients = [];
     steps = [];
-    selectedTagIds = new Set<number>();
+    selectedTagIds = new SvelteSet<number>();
     notes = "";
     submitting = false;
     submitError = null;
@@ -92,7 +94,7 @@
           servings,
           ingredients: ingredients.map(({ name, amount, unit }) => ({ name, amount, unit })),
           steps: steps.map(({ content }) => ({ content })),
-          tagIds: [...selectedTagIds],
+          tagIds: Array.from(selectedTagIds),
           notes
         })
       });
@@ -115,7 +117,7 @@
 </script>
 
 <Dialog.Root bind:open>
-  <Dialog.Content class="max-w-2xl max-h-[85vh] flex flex-col overflow-hidden">
+  <Dialog.Content class="max-w-2xl md:max-w-3xl max-h-[85vh] flex flex-col overflow-hidden mx-auto">
     <Dialog.Header>
       <Dialog.Title class="font-serif text-2xl">Add recipe...</Dialog.Title>
       <div class="flex flex-row items-center gap-1 mt-2">

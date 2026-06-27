@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { ArrowLeft } from "@lucide/svelte";
+  import { marked } from "marked";
 
+  import MealTypeBadge from "$lib/components/MealTypeBadge.svelte";
   import RecipeIngredients from "$lib/components/recipe/RecipeIngredients.svelte";
   import RecipeSteps from "$lib/components/recipe/RecipeSteps.svelte";
+  import ReturnToHomeButton from "$lib/components/ReturnToHomeButton.svelte";
   import { Badge } from "$lib/components/ui/badge";
   import type { PageProps } from "./$types";
-
-  import { resolve } from "$app/paths";
 
   const MEAL_TYPE_COLOURS: Record<string, string> = {
     breakfast: "bg-accent",
@@ -20,17 +20,15 @@
   const { data }: PageProps = $props();
   const { recipe } = $derived(data);
 
+  let multiplier = $state(1);
+
+  const scaledServings = $derived(recipe.servings ? Math.round(recipe.servings * multiplier) : null);
+
   const stripeColour = $derived(MEAL_TYPE_COLOURS[recipe.mealType] ?? MEAL_TYPE_COLOURS.other);
 </script>
 
 <div class="mx-auto max-w-5xl px-6 pt-24 pb-16">
-  <a
-    href={resolve("/")}
-    class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors"
-  >
-    <ArrowLeft size={16} />
-    Back to recipes...
-  </a>
+  <ReturnToHomeButton />
 
   <h1 class="font-serif text-4xl mb-2">{recipe.title}</h1>
 
@@ -38,8 +36,8 @@
     <span class="text-muted-foreground mb-4">{recipe.description}</span>
   {/if}
 
-  <div class="flex flex-row flex-wrap gap-2 mb-8">
-    <Badge>{recipe.mealType}</Badge>
+  <div class="flex flex-row flex-wrap gap-2 mb-8 mt-2">
+    <MealTypeBadge mealType={recipe.mealType} />
     {#each recipe.tags as tag (tag.id)}
       <Badge variant="outline">{tag.name}</Badge>
     {/each}
@@ -66,14 +64,14 @@
           {#if recipe.servings}
             <div class="flex justify-between">
               <span class="text-muted-foreground">Servings</span>
-              <span class="font-medium">{recipe.servings} people</span>
+              <span class="font-medium">{scaledServings} people</span>
             </div>
           {/if}
         </div>
 
         <hr class="border-border" />
 
-        <RecipeIngredients ingredients={recipe.ingredients} />
+        <RecipeIngredients ingredients={recipe.ingredients} bind:multiplier />
       </div>
     </aside>
 
@@ -84,10 +82,11 @@
 
       {#if recipe.notes}
         <div class="border-t pt-6">
-          <h2 class="font-serif text-xl mb-3">Notes</h2>
-          <span class="text-muted-foreground text-sm leading-relaxed whitespace-pre-wrap">
-            {recipe.notes}
-          </span>
+          <h2 class="font-serif text-xl mb-4">Notes</h2>
+          <div class="prose prose-sm text-muted-foreground">
+            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+            {@html marked(recipe.notes)}
+          </div>
         </div>
       {/if}
     </section>

@@ -1,4 +1,5 @@
 import { error, json } from "@sveltejs/kit";
+import { eq } from "drizzle-orm";
 
 import { db } from "$lib/server/db";
 import { ingredients as ingredientsTable, recipes, recipeTags, steps as stepsTable } from "$lib/server/db/schema";
@@ -63,11 +64,11 @@ export const POST: RequestHandler = async event => {
       );
     }
 
-    if (tagIds?.lenth > 0) {
+    if (tagIds?.length > 0) {
       await tx.insert(recipeTags).values(
         tagIds.map((tagId: number) => ({
           recipeId: recipe.id,
-          tagId
+          tagId: Number(tagId)
         }))
       );
     }

@@ -1,8 +1,9 @@
 <script lang="ts">
   import type { Session } from "@auth/sveltekit";
-  import { ChefHat } from "@lucide/svelte";
+  import { ChefHat, Ellipsis, LogOut, Tag } from "@lucide/svelte";
 
-  import { Button } from "$lib/components/ui/button";
+  import { Button, buttonVariants } from "$lib/components/ui/button";
+  import { Popover, PopoverContent, PopoverTrigger } from "$lib/components/ui/popover";
   import AddRecipeButton from "./recipe/AddRecipeButton.svelte";
 
   import { resolve } from "$app/paths";
@@ -18,9 +19,30 @@
   <div class="flex flex-row gap-3 items-center">
     {#if session}
       <AddRecipeButton onclick={onAddRecipe} />
-      <form method="POST" action="/auth/signout">
-        <Button variant="ghost" type="submit">Sign out...</Button>
-      </form>
+      <Popover>
+        <PopoverTrigger class={buttonVariants({ variant: "ghost" })}>
+          <Ellipsis size={16} />
+        </PopoverTrigger>
+        <PopoverContent class="w-40">
+          <div class="grid gap-2">
+            <div class="flex flex-row items-center gap-x-2">
+              <Button variant="ghost" href="/tags">
+                <Tag size={16} />
+                Edit tags...
+              </Button>
+            </div>
+            <hr class="border-t-2" />
+            <div class="flex flex-row items-center gap-x-2">
+              <form method="POST" action="/auth/signout">
+                <Button variant="ghost" type="submit">
+                  <LogOut size={16} />
+                  Log out
+                </Button>
+              </form>
+            </div>
+          </div>
+        </PopoverContent>
+      </Popover>
     {:else}
       <form method="POST" action="/auth/signin/">
         <input type="hidden" name="providerId" value="github" />

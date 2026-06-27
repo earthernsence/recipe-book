@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { marked } from "marked";
+
   import type { Step } from "$lib/server/db/schema";
 
   const { steps }: { steps: Array<Step> } = $props();
@@ -12,7 +14,8 @@
       >
         {step.orderIndex + 1}
       </span>
-      <span class="text-foreground leading-relaxed">{step.content}</span>
+      <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+      <span class="leading-relaxed prose prose-sm">{@html marked(step.content)}</span>
     </li>
   {/each}
 </ol>
