@@ -3,7 +3,7 @@
 
   import { Badge } from "./ui/badge";
 
-  let { mealType }: { mealType: string } = $props();
+  const { mealType }: { mealType: string } = $props();
 
   const mealTypeMappings: Map<string, { icon: typeof Croissant; class: string }> = new Map([
     ["breakfast", { icon: Croissant, class: "bg-accent text-foreground" }],

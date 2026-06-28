@@ -1,11 +1,11 @@
 <script lang="ts">
   import { marked } from "marked";
 
-  import MealTypeBadge from "$lib/components/MealTypeBadge.svelte";
+  import RecipeActions from "$lib/components/recipe/RecipeActions.svelte";
   import RecipeIngredients from "$lib/components/recipe/RecipeIngredients.svelte";
   import RecipeSteps from "$lib/components/recipe/RecipeSteps.svelte";
   import ReturnToHomeButton from "$lib/components/ReturnToHomeButton.svelte";
-  import { Badge } from "$lib/components/ui/badge";
+  import TagList from "$lib/components/TagList.svelte";
   import type { PageProps } from "./$types";
 
   const MEAL_TYPE_COLOURS: Record<string, string> = {
@@ -36,12 +36,11 @@
     <span class="text-muted-foreground mb-4">{recipe.description}</span>
   {/if}
 
-  <div class="flex flex-row flex-wrap gap-2 mb-8 mt-2">
-    <MealTypeBadge mealType={recipe.mealType} />
-    {#each recipe.tags as tag (tag.id)}
-      <Badge variant="outline">{tag.name}</Badge>
-    {/each}
-  </div>
+  {#if data.session}
+    <RecipeActions {recipe} allTags={data.allTags} />
+  {/if}
+
+  <TagList tags={recipe.tags} mealType={recipe.mealType} class="mb-8 mt-2" />
 
   <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 items-start">
     <!-- Index card panel -->

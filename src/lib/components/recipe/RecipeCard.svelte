@@ -1,15 +1,9 @@
 <script lang="ts">
-  import {
-    Dot,
-    Salad,
-    Timer,
-    User,
-  } from "@lucide/svelte";
+  import { Dot, Salad, Timer, User } from "@lucide/svelte";
 
   import { quantify } from "$lib";
   import type { RecipeCardData } from "$lib/types";
-  import MealTypeBadge from "../MealTypeBadge.svelte";
-  import { Badge } from "../ui/badge";
+  import TagList from "../TagList.svelte";
 
   import { resolve } from "$app/paths";
 
@@ -19,14 +13,7 @@
 <a href={resolve(`/recipe/${recipe.id}`)} class="flex border-2 p-4 rounded-md">
   <article class="flex flex-col gap-y-2 w-full">
     <span class="font-serif text-2xl whitespace-nowrap overflow-hidden text-ellipsis">{recipe.title}</span>
-    <div class="flex flex-row flex-wrap gap-2">
-      <MealTypeBadge mealType={recipe.mealType} />
-      {#each recipe.tags as tag (tag.id)}
-        <Badge variant="outline">
-          {tag.name}
-        </Badge>
-      {/each}
-    </div>
+    <TagList tags={recipe.tags} mealType={recipe.mealType} />
     <span class="font-sans flex flex-row">
       <Timer class="mr-2" />
       {recipe.prepTimeMinutes} min prep <Dot />

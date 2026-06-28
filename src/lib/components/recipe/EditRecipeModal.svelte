@@ -1,59 +1,81 @@
 <script lang="ts">
   import { SvelteSet } from "svelte/reactivity";
 
+  import AddRecipeStep1 from "$lib/components/recipe/create/AddRecipeStep1.svelte";
+  import AddRecipeStep2 from "$lib/components/recipe/create/AddRecipeStep2.svelte";
+  import AddRecipeStep3 from "$lib/components/recipe/create/AddRecipeStep3.svelte";
   import { Button } from "$lib/components/ui/button";
   import * as Dialog from "$lib/components/ui/dialog";
   import type { Tag } from "$lib/server/db/schema";
-  import type { DraftIngredient, DraftStep, MealType } from "$lib/types";
-  import AddRecipeStep1 from "./AddRecipeStep1.svelte";
-  import AddRecipeStep2 from "./AddRecipeStep2.svelte";
-  import AddRecipeStep3 from "./AddRecipeStep3.svelte";
+  import type { DraftIngredient, DraftStep, MealType, RecipeDetailData } from "$lib/types";
 
-  import { goto, invalidateAll } from "$app/navigation";
-  import { resolve } from "$app/paths";
+  import { invalidateAll } from "$app/navigation";
 
   const STEP_TITLES = ["Basic info", "Ingredients & steps", "Tags & notes"];
 
   // oxlint-disable prefer-const
   let {
     open = $bindable(false),
+    recipe,
     allTags
   }: {
     open: boolean;
-    allTags: Array<Tag>;
+    recipe: RecipeDetailData;
+    allTags: Tag[];
   } = $props();
 
+  // Initialise from existing recipe
+  let title = $state(recipe.title);
+  let description = $state(recipe.description ?? "");
+  let cuisineType = $state(recipe.cuisineType ?? "");
+  let mealType = $state<MealType>(recipe.mealType as MealType);
+  let prepTimeMinutes = $state<number | null>(recipe.prepTimeMinutes);
+  let cookTimeMinutes = $state<number | null>(recipe.cookTimeMinutes);
+  let servings = $state<number | null>(recipe.servings);
+  let notes = $state(recipe.notes ?? "");
+  let ingredients = $state<DraftIngredient[]>(
+    recipe.ingredients.map(i => ({
+      tempId: crypto.randomUUID(),
+      name: i.name,
+      amount: i.amount,
+      unit: i.unit ?? null
+    }))
+  );
+  let steps = $state<DraftStep[]>(
+    recipe.steps.map(s => ({
+      tempId: crypto.randomUUID(),
+      content: s.content
+    }))
+  );
+  let selectedTagIds = new SvelteSet<number>(recipe.tags.map(t => t.id));
+
   let currentStep = $state(1);
-  let title = $state<string>("");
-  let description = $state<string>("");
-  let cuisineType = $state<string>("");
-  let mealType = $state<MealType>("dinner");
-  let prepTimeMinutes = $state<number | null>(null);
-  let cookTimeMinutes = $state<number | null>(null);
-  let servings = $state<number | null>(null);
-  let ingredients = $state<Array<DraftIngredient>>([]);
-  let steps = $state<Array<DraftStep>>([]);
-  // SvelteSets are already reactive
-  // svelte-ignore non_reactive_update
-  let selectedTagIds = new SvelteSet<number>();
-  let notes = $state<string>("");
   let submitting = $state(false);
   let submitError = $state<string | null>(null);
+
   // oxlint-enable prefer-const
 
   function reset() {
     currentStep = 1;
-    title = "";
-    description = "";
-    cuisineType = "";
-    mealType = "dinner";
-    prepTimeMinutes = null;
-    cookTimeMinutes = null;
-    servings = null;
-    ingredients = [];
-    steps = [];
-    selectedTagIds = new SvelteSet<number>();
-    notes = "";
+    title = recipe.title;
+    description = recipe.description ?? "";
+    cuisineType = recipe.cuisineType ?? "";
+    mealType = recipe.mealType as MealType;
+    prepTimeMinutes = recipe.prepTimeMinutes;
+    cookTimeMinutes = recipe.cookTimeMinutes;
+    servings = recipe.servings;
+    notes = recipe.notes ?? "";
+    ingredients = recipe.ingredients.map(i => ({
+      tempId: crypto.randomUUID(),
+      name: i.name,
+      amount: i.amount,
+      unit: i.unit ?? null
+    }));
+    steps = recipe.steps.map(s => ({
+      tempId: crypto.randomUUID(),
+      content: s.content
+    }));
+    selectedTagIds = new SvelteSet(recipe.tags.map(t => t.id));
     submitting = false;
     submitError = null;
   }
@@ -68,23 +90,22 @@
     return true;
   }
 
-  function next(): void {
-    if (currentStep < STEP_TITLES.length && canProceed()) currentStep++;
+  function next() {
+    if (currentStep < 3 && canProceed()) currentStep++;
   }
 
-  function prev(): void {
+  function prev() {
     if (currentStep > 1) currentStep--;
   }
 
   async function submit() {
     if (!canProceed()) return;
-
     submitting = true;
     submitError = null;
 
     try {
-      const res = await fetch("/api/recipes", {
-        method: "POST",
+      const res = await fetch(`/api/recipes/${recipe.id}`, {
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title,
@@ -103,15 +124,13 @@
 
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        throw new Error(err.message ?? "Failed to create recipe. I think you spilled your coffee.");
+        throw new Error(err.message ?? "Failed to update recipe");
       }
 
-      const { id } = await res.json();
       open = false;
       await invalidateAll();
-      goto(resolve(`/recipe/${id}`));
     } catch (e) {
-      submitError = e instanceof Error ? e.message : "Something went wrong.";
+      submitError = e instanceof Error ? e.message : "Something went wrong";
     } finally {
       submitting = false;
     }
@@ -121,11 +140,11 @@
 <Dialog.Root bind:open>
   <Dialog.Content class="max-w-2xl md:max-w-3xl max-h-[85vh] flex flex-col overflow-hidden mx-auto">
     <Dialog.Header>
-      <Dialog.Title class="font-serif text-2xl">Add recipe...</Dialog.Title>
+      <Dialog.Title class="font-serif text-2xl">Edit recipe</Dialog.Title>
       <div class="flex flex-row items-center gap-1 mt-2">
         {#each STEP_TITLES as stepTitle, i (stepTitle)}
           <span
-            class="flex items-center justify-center size-6 rounded-full text-xs font-semibold {currentStep >= i + 1
+            class="flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold {currentStep >= i + 1
               ? 'bg-primary text-primary-foreground'
               : 'bg-muted text-muted-foreground'}"
           >
@@ -160,7 +179,7 @@
     </div>
 
     {#if submitError}
-      <span class="text-sm text-destructive">{submitError}</span>
+      <p class="text-sm text-destructive">{submitError}</p>
     {/if}
 
     <Dialog.Footer class="flex flex-row justify-between items-center pt-2">
@@ -171,7 +190,7 @@
           <Button onclick={next} disabled={!canProceed()}>Next</Button>
         {:else}
           <Button onclick={submit} disabled={submitting}>
-            {submitting ? "Saving..." : "Save recipe"}
+            {submitting ? "Saving..." : "Save changes"}
           </Button>
         {/if}
       </div>

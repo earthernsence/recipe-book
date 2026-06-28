@@ -19,6 +19,10 @@
     notes: string;
   } = $props();
 
+  // We only take the initial state of tags -- we'll add any of the tags
+  // we create ourselves to the array so we don't have to update the original
+  // tags array
+  // svelte-ignore state_referenced_locally
   let localTags = $state([...allTags]);
   let newTagName = $state("");
   let creating = $state(false);
@@ -110,7 +114,8 @@
     {/if}
 
     <span class="text-xs text-muted-foreground">
-      Press Enter or click Add tag. Existing tag names will be selected instead.
+      Press Enter or click Add tag. Existing tag names will be selected instead. You can also click on any pre-existing
+      tag to select it and add it to this recipe.
     </span>
   </div>
 

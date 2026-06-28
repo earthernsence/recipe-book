@@ -6,6 +6,7 @@
   import { Textarea } from "$lib/components/ui/textarea";
   import type { DraftIngredient, DraftStep } from "$lib/types";
   import { UNITS } from "$lib/utils/utils_recipes";
+  import StepNumber from "../StepNumber.svelte";
 
   // oxlint-disable prefer-const
   let {
@@ -73,11 +74,7 @@
     <h3 class="font-serif text-lg">Steps</h3>
     {#each steps as step, i (step.tempId)}
       <div class="flex flex-row gap-2 items-start">
-        <span
-          class="flex items-center justify-center w-7 h-7 rounded-full bg-primary text-primary-foreground text-xs font-semibold shrink-0 mt-2"
-        >
-          {i + 1}
-        </span>
+        <StepNumber number={i + 1} size="sm" />
         <Textarea bind:value={step.content} placeholder="Describe this step..." class="flex-1 resize-none" rows={2} />
         <Button
           variant="ghost"
