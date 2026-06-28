@@ -106,7 +106,9 @@
         <ShoppingBasket size={16} />
         Ingredients
         {#if checkedCount > 0}
-          <span class="text-muted-foreground flex flex-row items-center"><Dot /> {checkedCount} / {recipe.ingredients.length}</span>
+          <span class="text-muted-foreground flex flex-row items-center"
+            ><Dot /> {checkedCount} / {recipe.ingredients.length}</span
+          >
         {/if}
       </Button>
 

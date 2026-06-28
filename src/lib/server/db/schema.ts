@@ -13,6 +13,8 @@ export const recipes = sqliteTable("recipes", {
   cookTimeMinutes: integer("cook_time_minutes"),
   servings: integer("servings"), // in terms of people, probably?
   notes: text("notes"), // stored as md, rendered properly on the site
+  source: text("source"), // addl. field for notating where a recipe came from
+  favourite: integer("favourite", { mode: "boolean" }).default(false),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
     .default(sql`(unixepoch())`),

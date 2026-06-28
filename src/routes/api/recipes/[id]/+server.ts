@@ -16,6 +16,7 @@ export const PATCH: RequestHandler = async event => {
   const {
     title,
     description,
+    source,
     cuisineType,
     mealType,
     prepTimeMinutes,
@@ -36,6 +37,7 @@ export const PATCH: RequestHandler = async event => {
       .set({
         title: title.trim(),
         description: description?.trim() || null,
+        source: source?.trim() || null,
         cuisineType: cuisineType?.trim() || null,
         mealType,
         prepTimeMinutes: prepTimeMinutes || null,

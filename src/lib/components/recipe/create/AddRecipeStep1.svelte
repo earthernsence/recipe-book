@@ -16,6 +16,7 @@
   let {
     title = $bindable(),
     description = $bindable(),
+    source = $bindable(),
     cuisineType = $bindable(),
     mealType = $bindable(),
     prepTimeMinutes = $bindable(),
@@ -24,6 +25,7 @@
   }: {
     title: string;
     description: string;
+    source: string;
     cuisineType: string;
     mealType: MealType;
     prepTimeMinutes: number | null;
@@ -42,6 +44,11 @@
   <div class="flex flex-col gap-1.5">
     <Label for="description">Description</Label>
     <Input id="description" bind:value={description} placeholder="Well, when I was a kid..." />
+  </div>
+
+  <div class="flex flex-col gap-1.5">
+    <Label for="source">Source</Label>
+    <Input id="source" bind:value={source} placeholder="Grandma, Betty Crocker, made it up..." />
   </div>
 
   <div class="flex flex-col gap-1.5">

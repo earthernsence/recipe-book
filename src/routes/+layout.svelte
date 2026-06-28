@@ -1,6 +1,8 @@
 <script lang="ts">
   import "../app.css";
 
+  import * as Tooltip from "$lib/components/ui/tooltip/";
+
   import favicon from "$lib/assets/favicon.svg";
   import Footer from "$lib/components/Footer.svelte";
   import Header from "$lib/components/Header.svelte";
@@ -19,7 +21,9 @@
 
 <Header session={data.session} onAddRecipe={() => (modalOpen = true)} />
 <main class="pb-16">
-  {@render children()}
+  <Tooltip.Provider delayDuration={200}>
+    {@render children()}
+  </Tooltip.Provider>
 </main>
 <Footer />
 <AddRecipeModal bind:open={modalOpen} allTags={data.allTags} />

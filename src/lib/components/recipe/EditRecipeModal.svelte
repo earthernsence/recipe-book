@@ -27,6 +27,7 @@
   // Initialise from existing recipe
   let title = $state(recipe.title);
   let description = $state(recipe.description ?? "");
+  let source = $state(recipe.source ?? "");
   let cuisineType = $state(recipe.cuisineType ?? "");
   let mealType = $state<MealType>(recipe.mealType as MealType);
   let prepTimeMinutes = $state<number | null>(recipe.prepTimeMinutes);
@@ -59,6 +60,7 @@
     currentStep = 1;
     title = recipe.title;
     description = recipe.description ?? "";
+    source = recipe.source ?? "";
     cuisineType = recipe.cuisineType ?? "";
     mealType = recipe.mealType as MealType;
     prepTimeMinutes = recipe.prepTimeMinutes;
@@ -110,6 +112,7 @@
         body: JSON.stringify({
           title,
           description,
+          source,
           cuisineType,
           mealType,
           prepTimeMinutes,
@@ -165,6 +168,7 @@
         <AddRecipeStep1
           bind:title
           bind:description
+          bind:source
           bind:cuisineType
           bind:mealType
           bind:prepTimeMinutes

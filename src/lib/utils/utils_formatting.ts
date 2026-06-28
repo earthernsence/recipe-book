@@ -4,9 +4,7 @@ const PLURAL_HELPER = new Map([
   [/$/u, "s"]
 ]);
 
-const pluralDatabase: Map<string, string> = new Map([
-  ["person", "people"]
-]);
+const pluralDatabase: Map<string, string> = new Map([["person", "people"]]);
 
 function generatePlural(word: string): string {
   for (const [match, replaceWith] of PLURAL_HELPER.entries()) {

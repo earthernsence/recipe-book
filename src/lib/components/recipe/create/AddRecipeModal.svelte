@@ -26,6 +26,7 @@
   let currentStep = $state(1);
   let title = $state<string>("");
   let description = $state<string>("");
+  let source = $state<string>("");
   let cuisineType = $state<string>("");
   let mealType = $state<MealType>("dinner");
   let prepTimeMinutes = $state<number | null>(null);
@@ -45,6 +46,7 @@
     currentStep = 1;
     title = "";
     description = "";
+    source = "";
     cuisineType = "";
     mealType = "dinner";
     prepTimeMinutes = null;
@@ -89,6 +91,7 @@
         body: JSON.stringify({
           title,
           description,
+          source,
           cuisineType,
           mealType,
           prepTimeMinutes,
@@ -146,6 +149,7 @@
         <AddRecipeStep1
           bind:title
           bind:description
+          bind:source
           bind:cuisineType
           bind:mealType
           bind:prepTimeMinutes

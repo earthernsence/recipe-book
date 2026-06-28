@@ -10,6 +10,7 @@
   import { Button } from "$lib/components/ui/button";
   import { ChefHat } from "@lucide/svelte";
   import { quantify } from "$lib";
+  import FavouriteButton from "$lib/components/recipe/FavouriteButton.svelte";
 
   const MEAL_TYPE_COLOURS: Record<string, string> = {
     breakfast: "bg-accent",
@@ -41,7 +42,10 @@
   {/if}
 
   {#if data.session}
-    <RecipeActions {recipe} allTags={data.allTags} />
+    <div class="flex items-center gap-1 shrink-0 pt-1">
+      <FavouriteButton recipeId={recipe.id} favourite={!!recipe.favourite} />
+      <RecipeActions {recipe} allTags={data.allTags} />
+    </div>
   {/if}
 
   <a href="/recipe/{recipe.id}/cook">
@@ -75,6 +79,12 @@
             <div class="flex justify-between">
               <span class="text-muted-foreground">Servings</span>
               <span class="font-medium">{quantify("person", scaledServings)}</span>
+            </div>
+          {/if}
+          {#if recipe.source}
+            <div class="flex justify-between">
+              <span class="text-muted-foreground">Source</span>
+              <span class="font-medium text-right max-w-[60%] wrap-break-word">{recipe.source}</span>
             </div>
           {/if}
         </div>

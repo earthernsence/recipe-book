@@ -39,7 +39,7 @@
   }
 </script>
 
-<div class="flex flex-row gap-2 mt-2">
+<div class="flex flex-row gap-2">
   <Button variant="outline" size="sm" onclick={() => (editOpen = true)} class="gap-2">
     <Pencil size={16} />
     Edit...

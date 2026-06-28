@@ -12,6 +12,7 @@ export const POST: RequestHandler = async event => {
   const {
     title,
     description,
+    source,
     cuisineType,
     mealType,
     prepTimeMinutes,
@@ -32,6 +33,7 @@ export const POST: RequestHandler = async event => {
       .values({
         title: title.trim(),
         description: description?.trim() || null,
+        source: source?.trim() || null,
         cuisineType: cuisineType?.trim() || null,
         mealType,
         prepTimeMinutes: prepTimeMinutes || null,

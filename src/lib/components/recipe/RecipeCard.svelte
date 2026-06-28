@@ -6,13 +6,20 @@
   import TagList from "../TagList.svelte";
 
   import { resolve } from "$app/paths";
+  import type { Session } from "@auth/sveltekit";
+  import FavouriteButton from "./FavouriteButton.svelte";
 
-  const { recipe }: { recipe: RecipeCardData } = $props();
+  const { recipe, session }: { recipe: RecipeCardData; session: Session | null } = $props();
 </script>
 
 <a href={resolve(`/recipe/${recipe.id}`)} class="flex border-2 p-4 rounded-md">
   <article class="flex flex-col gap-y-2 w-full">
-    <span class="font-serif text-2xl whitespace-nowrap overflow-hidden text-ellipsis">{recipe.title}</span>
+    <div class="flex items-center justify-between gap-2">
+      <span class="font-serif text-2xl whitespace-nowrap overflow-hidden text-ellipsis">{recipe.title}</span>
+      {#if session}
+        <FavouriteButton recipeId={recipe.id} favourite={!!recipe.favourite} size="sm" />
+      {/if}
+    </div>
     <TagList tags={recipe.tags} mealType={recipe.mealType} />
     <span class="font-sans flex flex-row">
       <Timer class="mr-2" />
