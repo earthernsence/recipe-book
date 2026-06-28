@@ -4,7 +4,9 @@ const PLURAL_HELPER = new Map([
   [/$/u, "s"]
 ]);
 
-const pluralDatabase: Map<string, string> = new Map([]);
+const pluralDatabase: Map<string, string> = new Map([
+  ["person", "people"]
+]);
 
 function generatePlural(word: string): string {
   for (const [match, replaceWith] of PLURAL_HELPER.entries()) {
@@ -26,8 +28,9 @@ export function pluralise(word: string, amount: number, plural?: string): string
   return newWord;
 }
 
-export function quantify(name: string, value: number): string {
+export function quantify(name: string, value: number | null): string {
   if (name === undefined || value === undefined) throw "Arguments must be defined in function quantify";
+  if (value === null) throw "Null value passed into function quantify";
 
   const plural = pluralise(name, value);
   return `${value} ${plural}`;

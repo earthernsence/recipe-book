@@ -7,6 +7,9 @@
   import ReturnToHomeButton from "$lib/components/ReturnToHomeButton.svelte";
   import TagList from "$lib/components/TagList.svelte";
   import type { PageProps } from "./$types";
+  import { Button } from "$lib/components/ui/button";
+  import { ChefHat } from "@lucide/svelte";
+  import { quantify } from "$lib";
 
   const MEAL_TYPE_COLOURS: Record<string, string> = {
     breakfast: "bg-accent",
@@ -34,11 +37,19 @@
 
   {#if recipe.description}
     <span class="text-muted-foreground mb-4">{recipe.description}</span>
+    <br />
   {/if}
 
   {#if data.session}
     <RecipeActions {recipe} allTags={data.allTags} />
   {/if}
+
+  <a href="/recipe/{recipe.id}/cook">
+    <Button class="gap-2 mt-2" size="lg">
+      <ChefHat size={16} />
+      Make this dish!
+    </Button>
+  </a>
 
   <TagList tags={recipe.tags} mealType={recipe.mealType} class="mb-8 mt-2" />
 
@@ -63,7 +74,7 @@
           {#if recipe.servings}
             <div class="flex justify-between">
               <span class="text-muted-foreground">Servings</span>
-              <span class="font-medium">{scaledServings} people</span>
+              <span class="font-medium">{quantify("person", scaledServings)}</span>
             </div>
           {/if}
         </div>

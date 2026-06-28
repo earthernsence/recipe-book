@@ -1,4 +1,5 @@
 import tsParser from "@typescript-eslint/parser";
+import tsPlugin from "@typescript-eslint/eslint-plugin";
 import importSort from "eslint-plugin-simple-import-sort";
 import sveltePlugin from "eslint-plugin-svelte";
 import svelteParser from "svelte-eslint-parser";
@@ -7,7 +8,8 @@ export default [
   ...sveltePlugin.configs["flat/recommended"],
   {
     plugins: {
-      "simple-import-sort": importSort
+      "simple-import-sort": importSort,
+      "@typescript-eslint": tsPlugin
     },
     rules: {
       "simple-import-sort/imports": [
@@ -20,7 +22,8 @@ export default [
           ]
         }
       ],
-      "simple-import-sort/exports": "error"
+      "simple-import-sort/exports": "error",
+      "@typescript-eslint/array-type": ["error", { default: "generic" }]
     }
   },
   {
