@@ -157,7 +157,7 @@
           bind:servings
         />
       {:else if currentStep === 2}
-        <AddRecipeStep2 bind:ingredients bind:steps mealType={mealType} />
+        <AddRecipeStep2 bind:ingredients bind:steps {mealType} />
       {:else}
         <AddRecipeStep3 {allTags} bind:selectedTagIds bind:notes />
       {/if}

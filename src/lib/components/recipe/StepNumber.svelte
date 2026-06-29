@@ -12,8 +12,6 @@
   const sizeClasses = $derived(size === "sm" ? "size-6 text-xs" : "size-8 text-sm");
 </script>
 
-<span
-  class="flex items-center justify-center rounded-full font-semibold shrink-0 {sizeClasses} {bgClass}"
->
+<span class="flex items-center justify-center rounded-full font-semibold shrink-0 {sizeClasses} {bgClass}">
   {number}
 </span>
