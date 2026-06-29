@@ -11,7 +11,17 @@
   ];
 
   // oxlint-disable-next-line prefer-const
-  let { ingredients, multiplier = $bindable(1) }: { ingredients: Array<Ingredient>; multiplier: number } = $props();
+  let {
+    ingredients,
+    multiplier = $bindable(1),
+    checklistMode = false,
+    completed = $bindable<Array<boolean>>([])
+  }: {
+    ingredients: Array<Ingredient>;
+    multiplier: number;
+    checklistMode?: boolean;
+    completed?: Array<boolean>;
+  } = $props();
 
   const scaled = $derived(
     ingredients.map(i => ({
@@ -35,12 +45,41 @@
     {/each}
   </div>
   <ul class="flex flex-col gap-1">
-    {#each scaled as ingredient (ingredient.id)}
-      <li class="flex flex-row gap-2 text-sm">
-        <span class="font-semibold w-16 shrink-0 text-right">
-          {ingredient.amount}{ingredient.unit ? ` ${ingredient.unit}` : ""}
-        </span>
-        <span>{ingredient.name}</span>
+    {#each scaled as ingredient, i (ingredient.id)}
+      <li>
+        {#if checklistMode}
+          <button
+            class="flex flex-row gap-3 items-center w-full text-left py-2 min-h-11 transition-colors"
+            onclick={() => (completed[i] = !completed[i])}
+          >
+            <div
+              class="w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors {completed[i]
+                ? 'bg-primary border-primary'
+                : 'border-border'}"
+            >
+              {#if completed[i]}
+                <span class="text-primary-foreground text-xs font-bold leading-none">✓</span>
+              {/if}
+            </div>
+            <span
+              class="text-sm font-semibold w-16 shrink-0 text-right transition-colors {completed[i]
+                ? 'text-muted-foreground'
+                : ''}"
+            >
+              {ingredient.amount}{ingredient.unit ? ` ${ingredient.unit}` : ""}
+            </span>
+            <span class="text-sm transition-colors {completed[i] ? 'line-through text-muted-foreground' : ''}">
+              {ingredient.name}
+            </span>
+          </button>
+        {:else}
+          <div class="flex flex-row gap-2 text-sm py-1">
+            <span class="font-semibold w-16 shrink-0 text-right">
+              {ingredient.amount}{ingredient.unit ? ` ${ingredient.unit}` : ""}
+            </span>
+            <span>{ingredient.name}</span>
+          </div>
+        {/if}
       </li>
     {/each}
   </ul>

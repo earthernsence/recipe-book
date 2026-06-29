@@ -14,8 +14,8 @@
 </script>
 
 <svelte:head>
-  <title>Jroyvibes Recipe Book</title>
-  <meta name="description" content="A collection of recipes, made by Jroyvibes" />
+  <title>Jroyvibes' Cookbook</title>
+  <meta name="description" content="A collection of recipes, made by Jroyvibes. Comparable to Betty Crocker" />
   <link rel="icon" href={favicon} />
 </svelte:head>
 

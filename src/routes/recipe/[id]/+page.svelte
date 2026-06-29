@@ -8,7 +8,7 @@
   import TagList from "$lib/components/TagList.svelte";
   import type { PageProps } from "./$types";
   import { Button } from "$lib/components/ui/button";
-  import { ChefHat } from "@lucide/svelte";
+  import { SquareCheckBig, ChefHat, Dot } from "@lucide/svelte";
   import { quantify } from "$lib";
   import FavouriteButton from "$lib/components/recipe/FavouriteButton.svelte";
 
@@ -21,6 +21,9 @@
     other: "bg-muted"
   };
 
+  let checklistMode = $state(false);
+  let completedIngredients = $state<Array<boolean>>([]);
+  let completedSteps = $state<Array<boolean>>([]);
   const { data }: PageProps = $props();
   const { recipe } = $derived(data);
 
@@ -29,6 +32,16 @@
   const scaledServings = $derived(recipe.servings ? Math.round(recipe.servings * multiplier) : null);
 
   const stripeColour = $derived(MEAL_TYPE_COLOURS[recipe.mealType] ?? MEAL_TYPE_COLOURS.other);
+
+  $effect(() => {
+    if (checklistMode) {
+      completedIngredients = recipe.ingredients.map(() => false);
+      completedSteps = recipe.steps.map(() => false);
+    }
+  });
+
+  const ingredientProgress = $derived(completedIngredients.filter(Boolean).length);
+  const stepsProgress = $derived(completedSteps.filter(Boolean).length);
 </script>
 
 <div class="mx-auto max-w-5xl px-6 pt-24 pb-16">
@@ -48,12 +61,30 @@
     </div>
   {/if}
 
-  <a href="/recipe/{recipe.id}/cook">
-    <Button class="gap-2 mt-2" size="lg">
-      <ChefHat size={16} />
-      Make this dish!
-    </Button>
-  </a>
+  <div class="flex flex-col md:flex-row gap-2 md:items-center my-2">
+    <a href="/recipe/{recipe.id}/cook">
+      <Button class="gap-2" size="lg">
+        <ChefHat size={16} />
+        Make this dish!
+      </Button>
+    </a>
+    <button
+      onclick={() => (checklistMode = !checklistMode)}
+      class="flex items-center gap-2 text-sm px-3 py-2 rounded-md border transition-colors {checklistMode
+        ? 'bg-primary/10 border-primary text-primary'
+        : 'border-border text-muted-foreground hover:text-foreground'}"
+    >
+      <SquareCheckBig size={16} />
+      {checklistMode ? "Disable checklists" : "Enable checklists"}
+      {#if checklistMode && (ingredientProgress > 0 || stepsProgress > 0)}
+        <span class="text-muted-foreground flex flex-row items-center">
+          <Dot size={16} />
+          {ingredientProgress} / {recipe.ingredients.length} ingredients,
+          {stepsProgress} / {recipe.steps.length} steps
+        </span>
+      {/if}
+    </button>
+  </div>
 
   <TagList tags={recipe.tags} mealType={recipe.mealType} class="mb-8 mt-2" />
 
@@ -91,14 +122,19 @@
 
         <hr class="border-border" />
 
-        <RecipeIngredients ingredients={recipe.ingredients} bind:multiplier />
+        <RecipeIngredients
+          ingredients={recipe.ingredients}
+          bind:multiplier
+          {checklistMode}
+          bind:completed={completedIngredients}
+        />
       </div>
     </aside>
 
     <!-- Steps pane -->
 
     <section class="flex flex-col gap-8">
-      <RecipeSteps steps={recipe.steps} />
+      <RecipeSteps steps={recipe.steps} {checklistMode} bind:completed={completedSteps} />
 
       {#if recipe.notes}
         <div class="border-t pt-6">
