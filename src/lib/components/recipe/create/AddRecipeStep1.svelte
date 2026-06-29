@@ -2,6 +2,7 @@
   import { Input } from "$lib/components/ui/input";
   import { Label } from "$lib/components/ui/label";
   import type { MealType } from "$lib/types";
+  import { getMealTypeBorder, getMealTypeStyles } from "$lib/utils/utils_styles";
 
   const MEAL_TYPES: Array<{ value: MealType; label: string }> = [
     { value: "breakfast", label: "Breakfast" },
@@ -64,7 +65,7 @@
           type="button"
           onclick={() => (mealType = mt.value)}
           class="px-3 py-1.5 rounded-md text-sm border transition-colors {mealType === mt.value
-            ? 'bg-primary text-primary-foreground border-primary'
+            ? `${getMealTypeStyles(mt.value)} ${getMealTypeBorder(mt.value)}`
             : 'bg-card border-border hover:bg-muted'}"
         >
           {mt.label}

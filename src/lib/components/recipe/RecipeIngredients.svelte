@@ -1,6 +1,12 @@
 <script lang="ts">
   import type { Ingredient } from "$lib/server/db/schema";
   import { formatAmount } from "$lib/utils/utils_formatting";
+  import {
+    getMealTypeBackground,
+    getMealTypeBorder,
+    getMealTypeStyles,
+    getMealTypeText
+  } from "$lib/utils/utils_styles";
 
   const MULTIPLIERS: Array<{ label: string; value: number }> = [
     { label: "¼×", value: 0.25 },
@@ -17,12 +23,14 @@
     ingredients,
     multiplier = $bindable(1),
     checklistMode = false,
-    completed = $bindable<Array<boolean>>([])
+    completed = $bindable<Array<boolean>>([]),
+    mealType = null
   }: {
     ingredients: Array<Ingredient>;
     multiplier: number;
     checklistMode?: boolean;
     completed?: Array<boolean>;
+    mealType?: string | null;
   } = $props();
   // oxlint-disable prefer-const
 
@@ -32,6 +40,9 @@
       amount: formatAmount(i.amount * multiplier)
     }))
   );
+  const activeStyle = $derived(
+    `${getMealTypeBackground(mealType)} ${getMealTypeText(mealType)} ${getMealTypeBorder(mealType)}`
+  );
 </script>
 
 <div class="flex flex-col gap-4">
@@ -39,7 +50,7 @@
     {#each MULTIPLIERS as m (m.value)}
       <button
         class="px-3 py-1 rounded-md text-sm border transition-colors {multiplier === m.value
-          ? 'bg-primary text-primary-foreground border-primary'
+          ? activeStyle
           : 'bg-card text-foreground border-border hover:bg-muted'}"
         onclick={() => (multiplier = m.value)}
       >

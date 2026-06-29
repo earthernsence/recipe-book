@@ -2,18 +2,18 @@
   const {
     number,
     size = "md",
-    class: className = ""
+    bgClass = "bg-primary text-primary-foreground"
   }: {
     number: number;
     size?: "sm" | "md";
-    class?: string;
+    bgClass?: string;
   } = $props();
 
   const sizeClasses = $derived(size === "sm" ? "size-6 text-xs" : "size-8 text-sm");
 </script>
 
 <span
-  class="flex items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold shrink-0 {sizeClasses} {className}"
+  class="flex items-center justify-center rounded-full font-semibold shrink-0 {sizeClasses} {bgClass}"
 >
   {number}
 </span>

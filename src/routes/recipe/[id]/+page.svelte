@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ChefHat, Dot, SquareCheckBig } from "@lucide/svelte";
+  import { ChefHat, Dot, Printer, SquareCheckBig } from "@lucide/svelte";
   import { marked } from "marked";
 
   import { quantify } from "$lib";
@@ -10,18 +10,10 @@
   import ReturnToHomeButton from "$lib/components/ReturnToHomeButton.svelte";
   import TagList from "$lib/components/TagList.svelte";
   import { Button } from "$lib/components/ui/button";
+  import { getMealTypeBackground, getMealTypeStyles } from "$lib/utils/utils_styles";
   import type { PageProps } from "./$types";
 
   import { resolve } from "$app/paths";
-
-  const MEAL_TYPE_COLOURS: Record<string, string> = {
-    breakfast: "bg-accent",
-    lunch: "bg-lunch",
-    dinner: "bg-primary",
-    dessert: "bg-dessert",
-    snack: "bg-snack",
-    other: "bg-muted"
-  };
 
   // checklistMode is reassigned through a function passed into a <button>
   // oxlint-disable-next-line prefer-const
@@ -37,7 +29,7 @@
 
   const scaledServings = $derived(recipe.servings ? Math.round(recipe.servings * multiplier) : null);
 
-  const stripeColour = $derived(MEAL_TYPE_COLOURS[recipe.mealType] ?? MEAL_TYPE_COLOURS.other);
+  const stripeColour = $derived(getMealTypeBackground(recipe.mealType));
 
   $effect(() => {
     if (checklistMode) {
@@ -140,6 +132,7 @@
           bind:multiplier
           {checklistMode}
           bind:completed={completedIngredients}
+          mealType={recipe.mealType}
         />
       </div>
     </aside>
@@ -147,7 +140,7 @@
     <!-- Steps pane -->
 
     <section class="flex flex-col gap-8">
-      <RecipeSteps steps={recipe.steps} {checklistMode} bind:completed={completedSteps} />
+      <RecipeSteps steps={recipe.steps} {checklistMode} bind:completed={completedSteps} mealType={recipe.mealType} />
 
       {#if recipe.notes}
         <div class="border-t pt-6">
@@ -158,6 +151,16 @@
           </div>
         </div>
       {/if}
+
+      <div class="border-t pt-6 print:hidden">
+        <button
+          onclick={() => window.print()}
+          class="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <Printer size={16} />
+          Print or save as PDF...
+        </button>
+      </div>
     </section>
   </div>
 </div>

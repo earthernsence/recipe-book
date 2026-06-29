@@ -6,15 +6,18 @@
   import { Textarea } from "$lib/components/ui/textarea";
   import type { DraftIngredient, DraftStep } from "$lib/types";
   import { UNITS } from "$lib/utils/utils_recipes";
+  import { getMealTypeStyles } from "$lib/utils/utils_styles";
   import StepNumber from "../StepNumber.svelte";
 
   // oxlint-disable prefer-const
   let {
     ingredients = $bindable(),
-    steps = $bindable()
+    steps = $bindable(),
+    mealType = null
   }: {
     ingredients: Array<DraftIngredient>;
     steps: Array<DraftStep>;
+    mealType?: string | null;
   } = $props();
   // oxlint-enable prefer-const
 
@@ -74,7 +77,7 @@
     <h3 class="font-serif text-lg">Steps</h3>
     {#each steps as step, i (step.tempId)}
       <div class="flex flex-row gap-2 items-start">
-        <StepNumber number={i + 1} size="sm" />
+        <StepNumber number={i + 1} size="sm" bgClass={getMealTypeStyles(mealType)} />
         <Textarea bind:value={step.content} placeholder="Describe this step..." class="flex-1 resize-none" rows={2} />
         <Button
           variant="ghost"

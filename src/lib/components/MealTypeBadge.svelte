@@ -1,25 +1,25 @@
 <script lang="ts">
   import { CakeSlice, Candy, CookingPot, Croissant, Sandwich, UtensilsCrossed } from "@lucide/svelte";
 
-  import { Badge } from "./ui/badge";
+  import type { MealType } from "$lib/types";
+  import { getMealTypeStyles } from "$lib/utils/utils_styles";
 
-  const { mealType }: { mealType: string } = $props();
-
-  const mealTypeMappings: Map<string, { icon: typeof Croissant; class: string }> = new Map([
-    ["breakfast", { icon: Croissant, class: "bg-accent text-foreground" }],
-    ["lunch", { icon: Sandwich, class: "bg-lunch text-card" }],
-    ["dinner", { icon: CookingPot, class: "bg-primary text-card" }],
-    ["dessert", { icon: CakeSlice, class: "bg-dessert text-card" }],
-    ["snack", { icon: Candy, class: "bg-snack text-card" }],
-    ["other", { icon: UtensilsCrossed, class: "bg-muted text-foreground" }]
+  const MEAL_TYPE_MAP: Map<MealType, { icon: typeof Croissant }> = new Map([
+    ["breakfast", { icon: Croissant }],
+    ["lunch", { icon: Sandwich }],
+    ["dinner", { icon: CookingPot }],
+    ["dessert", { icon: CakeSlice }],
+    ["snack", { icon: Candy }],
+    ["other", { icon: UtensilsCrossed }]
   ]);
 
-  // svelte-ignore state_referenced_locally
-  const mealTypeData = mealTypeMappings.get(mealType);
-  const MealTypeIcon = mealTypeData!.icon;
+  const { mealType }: { mealType: MealType } = $props();
+
+  const mapping = $derived(MEAL_TYPE_MAP.get(mealType) ?? MEAL_TYPE_MAP.get("other")!);
+  const classes = $derived(getMealTypeStyles(mealType));
 </script>
 
-<Badge class={mealTypeData!.class}>
-  <MealTypeIcon />
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium {classes}">
+  <mapping.icon size={12} />
   {mealType}
-</Badge>
+</span>

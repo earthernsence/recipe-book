@@ -3,16 +3,19 @@
   import { marked } from "marked";
 
   import type { Step } from "$lib/server/db/schema";
+  import { getMealTypeStyles } from "$lib/utils/utils_styles";
   import StepNumber from "./StepNumber.svelte";
 
   const {
     steps,
     checklistMode = false,
-    completed = $bindable<Array<boolean>>([])
+    completed = $bindable<Array<boolean>>([]),
+    mealType = null
   }: {
     steps: Array<Step>;
     checklistMode?: boolean;
     completed?: Array<boolean>;
+    mealType?: string | null;
   } = $props();
 
   function handleKeypress(e: KeyboardEvent, idx: number) {
@@ -20,6 +23,8 @@
       completed[idx] = !completed[idx];
     }
   }
+
+  const stepBgClass = $derived(getMealTypeStyles(mealType));
 </script>
 
 <ol class="flex flex-col gap-6">
@@ -34,13 +39,13 @@
     >
       <div class="shrink-0 mt-0.5">
         {#if checklistMode && completed[i]}
-          <div class="size-8 rounded-full bg-primary flex items-center justify-center">
+          <div class="size-8 rounded-full {stepBgClass} flex items-center justify-center">
             <span class="text-primary-foreground text-sm font-bold">
               <Check size={16} />
             </span>
           </div>
         {:else}
-          <StepNumber number={step.orderIndex + 1} />
+          <StepNumber number={step.orderIndex + 1} bgClass={stepBgClass} />
         {/if}
       </div>
 

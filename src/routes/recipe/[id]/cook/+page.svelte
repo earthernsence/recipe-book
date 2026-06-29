@@ -4,6 +4,7 @@
 
   import IngredientSheet from "$lib/components/recipe/cooking/IngredientSheet.svelte";
   import { Button } from "$lib/components/ui/button";
+  import { getMealTypeStyles } from "$lib/utils/utils_styles";
   import type { PageProps } from "./$types";
 
   import { resolve } from "$app/paths";
@@ -39,6 +40,8 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }
+
+  const stepBgClass = $derived(getMealTypeStyles(recipe.mealType));
 </script>
 
 <!-- The idea here is that we'll have an overlay above the standard layout. This'll work
@@ -74,7 +77,7 @@
       {#if !finished}
         <div class="flex items-center gap-3 mb-8">
           <span
-            class="flex items-center justify-center size-10 rounded-full bg-primary text-primary-foreground font-semibold text-lg shrink-0"
+            class="flex items-center justify-center size-10 rounded-full {stepBgClass} font-semibold text-lg shrink-0"
           >
             {currentStepIndex + 1}
           </span>
