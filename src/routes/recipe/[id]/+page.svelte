@@ -1,16 +1,18 @@
 <script lang="ts">
+  import { ChefHat, Dot, SquareCheckBig } from "@lucide/svelte";
   import { marked } from "marked";
 
+  import { quantify } from "$lib";
+  import FavouriteButton from "$lib/components/recipe/FavouriteButton.svelte";
   import RecipeActions from "$lib/components/recipe/RecipeActions.svelte";
   import RecipeIngredients from "$lib/components/recipe/RecipeIngredients.svelte";
   import RecipeSteps from "$lib/components/recipe/RecipeSteps.svelte";
   import ReturnToHomeButton from "$lib/components/ReturnToHomeButton.svelte";
   import TagList from "$lib/components/TagList.svelte";
-  import type { PageProps } from "./$types";
   import { Button } from "$lib/components/ui/button";
-  import { SquareCheckBig, ChefHat, Dot } from "@lucide/svelte";
-  import { quantify } from "$lib";
-  import FavouriteButton from "$lib/components/recipe/FavouriteButton.svelte";
+  import type { PageProps } from "./$types";
+
+  import { resolve } from "$app/paths";
 
   const MEAL_TYPE_COLOURS: Record<string, string> = {
     breakfast: "bg-accent",
@@ -21,12 +23,16 @@
     other: "bg-muted"
   };
 
+  // checklistMode is reassigned through a function passed into a <button>
+  // oxlint-disable-next-line prefer-const
   let checklistMode = $state(false);
   let completedIngredients = $state<Array<boolean>>([]);
   let completedSteps = $state<Array<boolean>>([]);
   const { data }: PageProps = $props();
   const { recipe } = $derived(data);
 
+  // multiplier is reassigned through a function passed into <RecipeIngredients>
+  // oxlint-disable-next-line prefer-const
   let multiplier = $state(1);
 
   const scaledServings = $derived(recipe.servings ? Math.round(recipe.servings * multiplier) : null);
@@ -44,25 +50,32 @@
   const stepsProgress = $derived(completedSteps.filter(Boolean).length);
 </script>
 
-<div class="mx-auto max-w-5xl px-6 pt-24 pb-16">
+<div class="hidden print:block border-b pb-4">
+  <h1 class="font-serif text-3xl">{recipe.title}</h1>
+  {#if recipe.source}
+    <span class="text-sm text-muted-foreground mt-1">Source: {recipe.source}</span>
+  {/if}
+</div>
+
+<div class="mx-auto max-w-5xl px-6 pt-24 pb-16 print:pt-6 print:px-4">
   <ReturnToHomeButton />
 
-  <h1 class="font-serif text-4xl mb-2">{recipe.title}</h1>
+  <h1 class="font-serif text-4xl mb-2 print:hidden">{recipe.title}</h1>
 
   {#if recipe.description}
-    <span class="text-muted-foreground mb-4">{recipe.description}</span>
+    <span class="text-muted-foreground">{recipe.description}</span>
     <br />
   {/if}
 
   {#if data.session}
-    <div class="flex items-center gap-1 shrink-0 pt-1">
+    <div class="flex items-center gap-1 shrink-0 pt-1 print:hidden">
       <FavouriteButton recipeId={recipe.id} favourite={!!recipe.favourite} />
       <RecipeActions {recipe} allTags={data.allTags} />
     </div>
   {/if}
 
-  <div class="flex flex-col md:flex-row gap-2 md:items-center my-2">
-    <a href="/recipe/{recipe.id}/cook">
+  <div class="flex flex-col md:flex-row gap-2 md:items-center my-2 print:hidden">
+    <a href={resolve(`/recipe/${recipe.id}/cook`)}>
       <Button class="gap-2" size="lg">
         <ChefHat size={16} />
         Make this dish!
@@ -90,7 +103,7 @@
 
   <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 items-start">
     <!-- Index card panel -->
-    <aside class="rounded-lg border shadow-sm bg-card overflow-hidden md:sticky top-24">
+    <aside class="rounded-lg border shadow-sm bg-card overflow-hidden md:sticky top-24 print:static print:top-0">
       <div class="h-2 w-full {stripeColour}"></div>
       <div class="p-6 flex flex-col gap-6">
         <div class="flex flex-col gap-2 text-sm">

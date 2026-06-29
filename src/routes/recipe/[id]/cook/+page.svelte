@@ -6,12 +6,16 @@
   import { Button } from "$lib/components/ui/button";
   import type { PageProps } from "./$types";
 
+  import { resolve } from "$app/paths";
+
   const { data }: PageProps = $props();
   const { recipe } = data;
 
   let currentStepIndex = $state(0);
-  let completedSteps = $state<Array<boolean>>(recipe.steps.map(() => false));
+  const completedSteps = $state<Array<boolean>>(recipe.steps.map(() => false));
+  // oxlint-disable-next-line prefer-const
   let completedIngredients = $state<Array<boolean>>(recipe.ingredients.map(() => false));
+  // oxlint-disable-next-line prefer-const
   let ingredientsOpen = $state(false);
   let finished = $state(false);
 
@@ -46,7 +50,7 @@
   <!-- Top bar -->
   <header class="flex items-center justify-between px-4 py-3 border-b shrink-0 bg-background">
     <a
-      href="/recipe/{recipe.id}"
+      href={resolve(`/recipe/${recipe.id}`)}
       class="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors min-h-11"
     >
       <ArrowLeft size={20} />
@@ -82,6 +86,8 @@
         <div
           class="prose prose-base max-w-none text-foreground [&_p]:text-lg [&_p]:leading-relaxed [&_strong]:text-foreground"
         >
+          <!-- Needed for markdown functionality -->
+          <!-- eslint-disable-next-line svelte/no-at-html-tags -->
           {@html marked(currentStep.content)}
         </div>
       {:else}
@@ -89,9 +95,10 @@
           <ChefHat size={72} class="text-primary" />
           <div>
             <h1 class="font-serif text-4xl mb-3">You did it!</h1>
+            <h2 class="font-serif text-muted-foreground text-xl mb-3">Not bad, for an amateur.</h2>
             <span class="text-muted-foreground text-lg">{recipe.title}</span>
           </div>
-          <a href="/recipe/{recipe.id}">
+          <a href={resolve(`/recipe/${recipe.id}`)}>
             <Button size="lg" variant="outline">Back to recipe...</Button>
           </a>
         </div>

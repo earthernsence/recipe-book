@@ -6,7 +6,7 @@
 
 <a
   href={resolve("/")}
-  class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors"
+  class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors print:hidden"
 >
   <ArrowLeft size={16} />
   Back to recipes...

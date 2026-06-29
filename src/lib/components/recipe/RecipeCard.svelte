@@ -1,13 +1,13 @@
 <script lang="ts">
+  import type { Session } from "@auth/sveltekit";
   import { Dot, Salad, Timer, User } from "@lucide/svelte";
 
   import { quantify } from "$lib";
   import type { RecipeCardData } from "$lib/types";
   import TagList from "../TagList.svelte";
+  import FavouriteButton from "./FavouriteButton.svelte";
 
   import { resolve } from "$app/paths";
-  import type { Session } from "@auth/sveltekit";
-  import FavouriteButton from "./FavouriteButton.svelte";
 
   const { recipe, session }: { recipe: RecipeCardData; session: Session | null } = $props();
 </script>

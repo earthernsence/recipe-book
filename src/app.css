@@ -147,3 +147,34 @@
     padding-bottom: calc(1rem + env(safe-area-inset-bottom));
   }
 }
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    box-shadow: none !important;
+  }
+
+  header,
+  footer {
+    display: none !important;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+
+  li {
+    break-inside: avoid;
+  }
+
+  .prose {
+    max-width: 100% !important;
+  }
+}

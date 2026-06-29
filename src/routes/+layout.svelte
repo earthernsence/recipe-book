@@ -1,15 +1,16 @@
 <script lang="ts">
   import "../app.css";
 
-  import * as Tooltip from "$lib/components/ui/tooltip/";
-
   import favicon from "$lib/assets/favicon.svg";
   import Footer from "$lib/components/Footer.svelte";
   import Header from "$lib/components/Header.svelte";
   import AddRecipeModal from "$lib/components/recipe/create/AddRecipeModal.svelte";
+  import * as Tooltip from "$lib/components/ui/tooltip/";
 
   const { children, data } = $props();
 
+  // modalOpen is reassigned through a function passed into <Header>
+  // oxlint-disable-next-line prefer-const
   let modalOpen = $state<boolean>(false);
 </script>
 

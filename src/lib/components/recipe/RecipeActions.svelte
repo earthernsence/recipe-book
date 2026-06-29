@@ -18,7 +18,11 @@
     allTags: Array<Tag>;
   } = $props();
 
+  // editOpen and deleteOpen are modal states, and are reassigned through
+  // inline functions passed into <Button> elements
+  // oxlint-disable-next-line prefer-const
   let editOpen = $state(false);
+  // oxlint-disable-next-line prefer-const
   let deleteOpen = $state(false);
   let deleting = $state(false);
   let deleteError = $state<string | null>(null);

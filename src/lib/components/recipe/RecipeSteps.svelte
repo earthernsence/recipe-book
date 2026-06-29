@@ -1,18 +1,18 @@
 <script lang="ts">
+  import { Check } from "@lucide/svelte";
   import { marked } from "marked";
+
   import type { Step } from "$lib/server/db/schema";
   import StepNumber from "./StepNumber.svelte";
 
-  import { Check } from "@lucide/svelte";
-
-  let {
+  const {
     steps,
     checklistMode = false,
-    completed = $bindable<boolean[]>([])
+    completed = $bindable<Array<boolean>>([])
   }: {
-    steps: Step[];
+    steps: Array<Step>;
     checklistMode?: boolean;
-    completed?: boolean[];
+    completed?: Array<boolean>;
   } = $props();
 
   function handleKeypress(e: KeyboardEvent, idx: number) {
@@ -49,6 +49,8 @@
           ? 'opacity-40 line-through'
           : ''}"
       >
+        <!-- Needed for markdown functionality -->
+        <!-- eslint-disable-next-line svelte/no-at-html-tags -->
         {@html marked(step.content)}
       </div>
     </li>

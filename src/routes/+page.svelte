@@ -1,16 +1,17 @@
 <script lang="ts">
   import { Star } from "@lucide/svelte";
   import Fuse from "fuse.js";
+  import { SvelteMap } from "svelte/reactivity";
 
   import RecipeCard from "$lib/components/recipe/RecipeCard.svelte";
   import { Badge } from "$lib/components/ui/badge";
   import * as Select from "$lib/components/ui/select";
+  import { quantify } from "$lib/utils/utils_formatting";
   import type { PageProps } from "./$types";
 
   import { goto } from "$app/navigation";
   import { resolve } from "$app/paths";
   import { page } from "$app/state";
-  import { quantify } from "$lib/utils/utils_formatting";
 
   const { data }: PageProps = $props();
 
@@ -47,7 +48,7 @@
   // oxlint-enable prefer-const
 
   const cuisineOptions = $derived.by(() => {
-    const counts = new Map<string, number>();
+    const counts = new SvelteMap<string, number>();
     let noneCount = 0;
 
     for (const recipe of data.recipes) {

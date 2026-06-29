@@ -10,7 +10,9 @@
     { label: "3×", value: 3 }
   ];
 
-  // oxlint-disable-next-line prefer-const
+  // Several of these values are mutated by inline functions
+  // passed to other elements.
+  // oxlint-disable prefer-const
   let {
     ingredients,
     multiplier = $bindable(1),
@@ -22,6 +24,7 @@
     checklistMode?: boolean;
     completed?: Array<boolean>;
   } = $props();
+  // oxlint-disable prefer-const
 
   const scaled = $derived(
     ingredients.map(i => ({
@@ -32,7 +35,7 @@
 </script>
 
 <div class="flex flex-col gap-4">
-  <div class="flex flex-row gap-2">
+  <div class="flex flex-row gap-2 flex-wrap items-center justify-between print:hidden">
     {#each MULTIPLIERS as m (m.value)}
       <button
         class="px-3 py-1 rounded-md text-sm border transition-colors {multiplier === m.value

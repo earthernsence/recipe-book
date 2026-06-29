@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ArrowLeft, Check, Pencil, Trash2, X } from "@lucide/svelte";
+  import { Check, Download, Pencil, Trash2, X } from "@lucide/svelte";
 
   import ReturnToHomeButton from "$lib/components/ReturnToHomeButton.svelte";
   import { Button } from "$lib/components/ui/button";
@@ -7,6 +7,7 @@
   import type { PageProps } from "./$types";
 
   import { invalidateAll } from "$app/navigation";
+  import { resolve } from "$app/paths";
 
   const { data }: PageProps = $props();
 
@@ -96,4 +97,20 @@
       {/each}
     </ul>
   {/if}
+
+  <div class="mt-12 pt-8 border-t flex flex-col gap-3">
+    <div>
+      <h2 class="font-serif text-xl mb-1">Export recipes</h2>
+      <span class="text-sm text-muted-foreground">
+        Download all recipes as a JSON file. It's recommended to do this once a month, just to keep a backup somewhere
+        safe.
+      </span>
+    </div>
+    <a href={resolve("/api/export")} download>
+      <Button variant="outline" class="gap-2 w-full sm:w-auto flex flex-row items-center">
+        <Download size={16} />
+        Download recipes.json
+      </Button>
+    </a>
+  </div>
 </div>

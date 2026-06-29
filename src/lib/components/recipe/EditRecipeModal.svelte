@@ -21,7 +21,7 @@
   }: {
     open: boolean;
     recipe: RecipeDetailData;
-    allTags: Tag[];
+    allTags: Array<Tag>;
   } = $props();
 
   // Initialise from existing recipe
@@ -34,7 +34,7 @@
   let cookTimeMinutes = $state<number | null>(recipe.cookTimeMinutes);
   let servings = $state<number | null>(recipe.servings);
   let notes = $state(recipe.notes ?? "");
-  let ingredients = $state<DraftIngredient[]>(
+  let ingredients = $state<Array<DraftIngredient>>(
     recipe.ingredients.map(i => ({
       tempId: crypto.randomUUID(),
       name: i.name,
@@ -42,7 +42,7 @@
       unit: i.unit ?? null
     }))
   );
-  let steps = $state<DraftStep[]>(
+  let steps = $state<Array<DraftStep>>(
     recipe.steps.map(s => ({
       tempId: crypto.randomUUID(),
       content: s.content

@@ -13,8 +13,8 @@
     ingredients = $bindable(),
     steps = $bindable()
   }: {
-    ingredients: DraftIngredient[];
-    steps: DraftStep[];
+    ingredients: Array<DraftIngredient>;
+    steps: Array<DraftStep>;
   } = $props();
   // oxlint-enable prefer-const
 

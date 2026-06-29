@@ -5,6 +5,7 @@
   import type { Ingredient } from "$lib/server/db/schema";
   import { formatAmount } from "$lib/utils/utils_formatting";
 
+  // oxlint-disable prefer-const
   let {
     open = $bindable(false),
     ingredients,
@@ -14,6 +15,7 @@
     ingredients: Array<Ingredient>;
     completed: Array<boolean>;
   } = $props();
+  // oxlint-enable prefer-const
 </script>
 
 <Sheet.Root bind:open>

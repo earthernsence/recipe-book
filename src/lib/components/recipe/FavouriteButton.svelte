@@ -1,11 +1,12 @@
 <script lang="ts">
-  import { onDestroy } from "svelte";
-  import { invalidateAll } from "$app/navigation";
   import { Star } from "@lucide/svelte";
+  import { onDestroy } from "svelte";
 
   import * as Tooltip from "$lib/components/ui/tooltip";
 
-  let {
+  import { invalidateAll } from "$app/navigation";
+
+  const {
     recipeId,
     favourite: initialFavourite,
     size = "default"
