@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Plus, Trash2 } from "@lucide/svelte";
+  import { ChevronDown, ChevronUp } from "@lucide/svelte";
 
   import { Button } from "$lib/components/ui/button";
   import { Input } from "$lib/components/ui/input";
@@ -30,6 +31,12 @@
     if (index !== -1) ingredients.splice(index, 1);
   }
 
+  function moveIngredient(index: number, direction: -1 | 1): void {
+    const targetIdx = index + direction;
+    if (targetIdx < 0 || targetIdx >= ingredients.length) return;
+    [ingredients[index], ingredients[targetIdx]] = [ingredients[targetIdx], ingredients[index]];
+  }
+
   function addStep() {
     steps.push({ tempId: crypto.randomUUID(), content: "" });
   }
@@ -38,13 +45,37 @@
     const index = steps.findIndex(s => s.tempId === tempId);
     if (index !== -1) steps.splice(index, 1);
   }
+
+  function moveStep(index: number, direction: -1 | 1): void {
+    const targetIdx = index + direction;
+    if (targetIdx < 0 || targetIdx >= steps.length) return;
+    [steps[index], steps[targetIdx]] = [steps[targetIdx], steps[index]];
+  }
 </script>
 
 <div class="flex flex-col gap-6">
   <div class="flex flex-col gap-3">
     <h3 class="font-serif text-lg">Ingredients</h3>
-    {#each ingredients as ingredient (ingredient.tempId)}
+    {#each ingredients as ingredient, i (ingredient.tempId)}
       <div class="flex flex-row gap-2 items-center">
+        <div class="flex flex-col shrink-0">
+          <button
+            type="button"
+            onclick={() => moveIngredient(i, -1)}
+            disabled={i === 0}
+            class="text-muted-foreground hover:text-foreground h-4 disabled:opacity-20"
+          >
+            <ChevronUp size={16} />
+          </button>
+          <button
+            type="button"
+            onclick={() => moveIngredient(i, 1)}
+            disabled={i === ingredients.length - 1}
+            class="text-muted-foreground hover:text-foreground h-4 disabled:opacity-20"
+          >
+            <ChevronDown size={16} />
+          </button>
+        </div>
         <Input type="number" min="0" step="any" bind:value={ingredient.amount} class="w-20 shrink-0" placeholder="1" />
         <select
           bind:value={ingredient.unit}
@@ -77,6 +108,14 @@
     <h3 class="font-serif text-lg">Steps</h3>
     {#each steps as step, i (step.tempId)}
       <div class="flex flex-row gap-2 items-start">
+        <div class="flex flex-col shrink-0 mt-2">
+          <button type="button" onclick={() => moveStep(i, -1)} disabled={i === 0} class="text-muted-foreground hover:text-foreground h-4 disabled:opacity-20">
+            <ChevronUp size={16} />
+          </button>
+          <button type="button" onclick={() => moveStep(i, 1)} disabled={i === steps.length - 1} class="text-muted-foreground hover:text-foreground h-4 disabled:opacity-20">
+            <ChevronDown size={16} />
+          </button>
+        </div>
         <StepNumber number={i + 1} size="sm" bgClass={getMealTypeStyles(mealType)} />
         <Textarea bind:value={step.content} placeholder="Describe this step..." class="flex-1 resize-none" rows={2} />
         <Button
