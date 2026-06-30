@@ -20,11 +20,13 @@
   <link rel="icon" href={favicon} />
 </svelte:head>
 
-<Header session={data.session} onAddRecipe={() => (modalOpen = true)} />
-<main class="pb-16">
-  <Tooltip.Provider delayDuration={200}>
-    {@render children()}
-  </Tooltip.Provider>
-</main>
-<Footer />
-<AddRecipeModal bind:open={modalOpen} allTags={data.allTags} />
+<div class="flex flex-col min-h-screen">
+  <Header session={data.session} onAddRecipe={() => (modalOpen = true)} />
+  <main class="flex-1 pb-16">
+    <Tooltip.Provider delayDuration={200}>
+      {@render children()}
+    </Tooltip.Provider>
+  </main>
+  <Footer />
+  <AddRecipeModal bind:open={modalOpen} allTags={data.allTags} />
+</div>
