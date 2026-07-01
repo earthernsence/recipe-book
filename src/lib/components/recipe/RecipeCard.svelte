@@ -20,7 +20,7 @@
         <FavouriteButton recipeId={recipe.id} favourite={!!recipe.favourite} size="sm" />
       {/if}
     </div>
-    <TagList tags={recipe.tags} mealType={recipe.mealType} />
+    <TagList tags={recipe.tags} mealType={recipe.mealType} difficulty={recipe.difficulty} />
     <span class="font-sans flex flex-row">
       <Timer class="mr-2" />
       {recipe.prepTimeMinutes} min prep <Dot />

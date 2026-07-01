@@ -7,7 +7,7 @@
   import { Button } from "$lib/components/ui/button";
   import * as Dialog from "$lib/components/ui/dialog";
   import type { Tag } from "$lib/server/db/schema";
-  import type { DraftIngredient, DraftStep, MealType, RecipeDetailData } from "$lib/types";
+  import type { Difficulty, DraftIngredient, DraftStep, MealType, RecipeDetailData } from "$lib/types";
 
   import { invalidateAll } from "$app/navigation";
 
@@ -30,6 +30,7 @@
   let source = $state(recipe.source ?? "");
   let cuisineType = $state(recipe.cuisineType ?? "");
   let mealType = $state<MealType>(recipe.mealType as MealType);
+  let difficulty = $state<Difficulty>(recipe.difficulty as Difficulty);
   let prepTimeMinutes = $state<number | null>(recipe.prepTimeMinutes);
   let cookTimeMinutes = $state<number | null>(recipe.cookTimeMinutes);
   let servings = $state<number | null>(recipe.servings);
@@ -63,6 +64,7 @@
     source = recipe.source ?? "";
     cuisineType = recipe.cuisineType ?? "";
     mealType = recipe.mealType as MealType;
+    difficulty = recipe.difficulty as Difficulty;
     prepTimeMinutes = recipe.prepTimeMinutes;
     cookTimeMinutes = recipe.cookTimeMinutes;
     servings = recipe.servings;
@@ -115,6 +117,7 @@
           source,
           cuisineType,
           mealType,
+          difficulty,
           prepTimeMinutes,
           cookTimeMinutes,
           servings,
@@ -171,6 +174,7 @@
           bind:source
           bind:cuisineType
           bind:mealType
+          bind:difficulty
           bind:prepTimeMinutes
           bind:cookTimeMinutes
           bind:servings

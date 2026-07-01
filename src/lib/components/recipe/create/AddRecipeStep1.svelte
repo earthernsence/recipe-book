@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Input } from "$lib/components/ui/input";
   import { Label } from "$lib/components/ui/label";
-  import type { MealType } from "$lib/types";
+  import type { Difficulty, MealType } from "$lib/types";
   import { getMealTypeBorder, getMealTypeStyles } from "$lib/utils/utils_styles";
 
   const MEAL_TYPES: Array<{ value: MealType; label: string }> = [
@@ -13,6 +13,12 @@
     { value: "other", label: "Other" }
   ];
 
+  const DIFFICULTIES: Array<{ value: Difficulty; label: string }> = [
+    { value: "easy", label: "Easy" },
+    { value: "intermediate", label: "Intermediate" },
+    { value: "hard", label: "Hard" }
+  ];
+
   // oxlint-disable prefer-const
   let {
     title = $bindable(),
@@ -20,6 +26,7 @@
     source = $bindable(),
     cuisineType = $bindable(),
     mealType = $bindable(),
+    difficulty = $bindable(),
     prepTimeMinutes = $bindable(),
     cookTimeMinutes = $bindable(),
     servings = $bindable()
@@ -29,6 +36,7 @@
     source: string;
     cuisineType: string;
     mealType: MealType;
+    difficulty: Difficulty;
     prepTimeMinutes: number | null;
     cookTimeMinutes: number | null;
     servings: number | null;
@@ -69,6 +77,23 @@
             : 'bg-card border-border hover:bg-muted'}"
         >
           {mt.label}
+        </button>
+      {/each}
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <Label>Difficulty</Label>
+    <div class="flex flex-wrap gap-2">
+      {#each DIFFICULTIES as diff (diff.value)}
+        <button
+          type="button"
+          onclick={() => (difficulty = diff.value)}
+          class="px-3 py-1.5 rounded-md text-sm border transition-colors {difficulty === diff.value
+            ? 'bg-primary/75 border-primary text-primary-foreground'
+            : 'bg-card border-border hover:bg-muted'}"
+        >
+          {diff.label}
         </button>
       {/each}
     </div>

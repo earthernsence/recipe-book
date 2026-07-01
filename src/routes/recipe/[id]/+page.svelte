@@ -10,7 +10,7 @@
   import ReturnToHomeButton from "$lib/components/ReturnToHomeButton.svelte";
   import TagList from "$lib/components/TagList.svelte";
   import { Button } from "$lib/components/ui/button";
-  import { getMealTypeBackground, getMealTypeStyles } from "$lib/utils/utils_styles";
+  import { getMealTypeBackground } from "$lib/utils/utils_styles";
   import type { PageProps } from "./$types";
 
   import { resolve } from "$app/paths";
@@ -91,7 +91,7 @@
     </button>
   </div>
 
-  <TagList tags={recipe.tags} mealType={recipe.mealType} class="mb-8 mt-2" />
+  <TagList tags={recipe.tags} mealType={recipe.mealType} difficulty={recipe.difficulty} class="mb-8 mt-2" />
 
   <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 items-start">
     <!-- Index card panel -->

@@ -4,7 +4,7 @@
   import { Button } from "$lib/components/ui/button";
   import * as Dialog from "$lib/components/ui/dialog";
   import type { Tag } from "$lib/server/db/schema";
-  import type { DraftIngredient, DraftStep, MealType } from "$lib/types";
+  import { type Difficulty, type DraftIngredient, type DraftStep, type MealType } from "$lib/types";
   import AddRecipeStep1 from "./AddRecipeStep1.svelte";
   import AddRecipeStep2 from "./AddRecipeStep2.svelte";
   import AddRecipeStep3 from "./AddRecipeStep3.svelte";
@@ -29,6 +29,7 @@
   let source = $state<string>("");
   let cuisineType = $state<string>("");
   let mealType = $state<MealType>("dinner");
+  let difficulty = $state<Difficulty>("intermediate");
   let prepTimeMinutes = $state<number | null>(null);
   let cookTimeMinutes = $state<number | null>(null);
   let servings = $state<number | null>(null);
@@ -49,6 +50,7 @@
     source = "";
     cuisineType = "";
     mealType = "dinner";
+    difficulty = "intermediate";
     prepTimeMinutes = null;
     cookTimeMinutes = null;
     servings = null;
@@ -94,6 +96,7 @@
           source,
           cuisineType,
           mealType,
+          difficulty,
           prepTimeMinutes,
           cookTimeMinutes,
           servings,
@@ -152,6 +155,7 @@
           bind:source
           bind:cuisineType
           bind:mealType
+          bind:difficulty
           bind:prepTimeMinutes
           bind:cookTimeMinutes
           bind:servings

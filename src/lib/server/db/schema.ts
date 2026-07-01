@@ -14,6 +14,7 @@ export const recipes = sqliteTable("recipes", {
   servings: integer("servings"), // in terms of people, probably?
   notes: text("notes"), // stored as md, rendered properly on the site
   source: text("source"), // addl. field for notating where a recipe came from
+  difficulty: text("difficulty", { enum: ["easy", "intermediate", "hard"] }), // better like this than as a tag for filtering purposes
   favourite: integer("favourite", { mode: "boolean" }).default(false),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()

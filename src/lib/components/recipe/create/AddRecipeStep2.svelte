@@ -109,10 +109,20 @@
     {#each steps as step, i (step.tempId)}
       <div class="flex flex-row gap-2 items-start">
         <div class="flex flex-col shrink-0 mt-2">
-          <button type="button" onclick={() => moveStep(i, -1)} disabled={i === 0} class="text-muted-foreground hover:text-foreground h-4 disabled:opacity-20">
+          <button
+            type="button"
+            onclick={() => moveStep(i, -1)}
+            disabled={i === 0}
+            class="text-muted-foreground hover:text-foreground h-4 disabled:opacity-20"
+          >
             <ChevronUp size={16} />
           </button>
-          <button type="button" onclick={() => moveStep(i, 1)} disabled={i === steps.length - 1} class="text-muted-foreground hover:text-foreground h-4 disabled:opacity-20">
+          <button
+            type="button"
+            onclick={() => moveStep(i, 1)}
+            disabled={i === steps.length - 1}
+            class="text-muted-foreground hover:text-foreground h-4 disabled:opacity-20"
+          >
             <ChevronDown size={16} />
           </button>
         </div>

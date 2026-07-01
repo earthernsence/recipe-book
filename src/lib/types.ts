@@ -13,6 +13,15 @@ export type RecipeDetailData = Recipe & {
 
 export type MealType = "breakfast" | "lunch" | "dinner" | "dessert" | "snack" | "other";
 
+export const MEAL_TYPES: Array<{ value: MealType; label: string }> = [
+  { value: "breakfast", label: "Breakfast" },
+  { value: "lunch", label: "Lunch" },
+  { value: "dinner", label: "Dinner" },
+  { value: "dessert", label: "Dessert" },
+  { value: "snack", label: "Snack" },
+  { value: "other", label: "Other" }
+] as const;
+
 export type DraftIngredient = {
   tempId: string;
   name: string;
@@ -24,3 +33,5 @@ export type DraftStep = {
   tempId: string;
   content: string;
 };
+
+export type Difficulty = "easy" | "intermediate" | "hard";
