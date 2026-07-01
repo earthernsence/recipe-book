@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ChefHat, Dot, Printer, SquareCheckBig } from "@lucide/svelte";
+  import { ChefHat, Dot, Printer, Share, SquareCheckBig } from "@lucide/svelte";
   import { marked } from "marked";
 
   import { quantify } from "$lib";
@@ -40,6 +40,10 @@
 
   const ingredientProgress = $derived(completedIngredients.filter(Boolean).length);
   const stepsProgress = $derived(completedSteps.filter(Boolean).length);
+
+  function share() {
+    navigator.share({ title: recipe.title, url: window.location.href });
+  }
 </script>
 
 <div class="hidden print:block border-b pb-4">
@@ -152,7 +156,7 @@
         </div>
       {/if}
 
-      <div class="border-t pt-6 print:hidden">
+      <div class="border-t pt-6 print:hidden flex flex-col gap-y-4">
         <button
           onclick={() => window.print()}
           class="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -160,6 +164,15 @@
           <Printer size={16} />
           Print or save as PDF...
         </button>
+        {#if typeof navigator !== "undefined" && "share" in navigator}
+          <button
+            onclick={share}
+            class="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <Share size={16} />
+            Share recipe...
+          </button>
+        {/if}
       </div>
     </section>
   </div>
