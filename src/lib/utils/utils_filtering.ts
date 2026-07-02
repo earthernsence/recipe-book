@@ -39,6 +39,11 @@ export class RecipeFilter {
     return params;
   }
 
+  /**
+   * THIS FUNCTION HAS LASTING EFFECTS ON THE FILTER STATE! DO NOT CALL THIS
+   * FUNCTION IF YOU ARE NOT PREPARED FOR THE DATA PRESENTED TO CHANGE.
+   * @param state The new FilterState object to move to.
+   */
   static setFilters(state: FilterState): void {
     const params = RecipeFilter.serialiseFilters(state);
     goto(resolve(`/?${params.toString()}`), { replaceState: true, keepFocus: true });

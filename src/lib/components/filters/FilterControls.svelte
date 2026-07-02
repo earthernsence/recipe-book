@@ -1,11 +1,11 @@
 <script lang="ts">
   import { ArrowDown01, ArrowDown10, ArrowDownAZ, ArrowDownZA, Funnel, FunnelX, Star } from "@lucide/svelte";
 
-  import { Badge } from "$lib/components/ui/badge";
   import * as Select from "$lib/components/ui/select";
   import type { Tag } from "$lib/server/db/schema";
   import { type Difficulty, MEAL_TYPES } from "$lib/types";
   import { type FilterState, RecipeFilter, type SortMode } from "$lib/utils/utils_filtering";
+  import TagSelector from "../TagSelector.svelte";
 
   const SORT_OPTIONS: Array<{ value: SortMode; label: string; icon: typeof ArrowDownAZ }> = [
     { value: "alpha-asc", label: "A → Z", icon: ArrowDownAZ },
@@ -40,16 +40,15 @@
     onchange({ ...filters, ...partial });
   }
 
-  function toggleTag(id: number) {
-    const next = new Set(filters.tagIds);
-    next.has(id) ? next.delete(id) : next.add(id);
-    patch({ tagIds: next });
-  }
-
   function toggleMealType(value: string) {
     const next = new Set(filters.mealTypes);
     next.has(value) ? next.delete(value) : next.add(value);
     patch({ mealTypes: next });
+  }
+
+  function toggleDifficulty(value: string) {
+    if (filters.difficulty === value) patch({ difficulty: "" });
+    else patch({ difficulty: value });
   }
 
   function clearAll() {
@@ -77,7 +76,8 @@
         <button
           type="button"
           onclick={() => patch({ sort: option.value })}
-          class="text-left text-sm px-2 py-1.5 rounded-md transition-colors {filters.sort === option.value
+          class="text-left text-sm px-2 py-1.5 rounded-md transition-colors inline-flex flex-row items-center gap-2 {filters.sort ===
+          option.value
             ? 'bg-primary/10 text-primary font-medium'
             : 'text-foreground hover:bg-muted'}"
         >
@@ -133,7 +133,7 @@
       {#each DIFFICULTY_OPTIONS as option (option.value)}
         <button
           type="button"
-          onclick={() => patch({ difficulty: option.value })}
+          onclick={() => toggleDifficulty(option.value)}
           class="text-left text-sm px-2 py-1.5 rounded-md transition-colors {filters.difficulty === option.value
             ? 'bg-primary/10 text-primary font-medium'
             : 'text-foreground hover:bg-muted'}"
@@ -184,13 +184,20 @@
 
   <!-- Tags -->
 
+  {#if allTags.length > 0}
+    <div class="flex flex-col gap-2">
+      <span class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Tags</span>
+      <TagSelector {allTags} selectedIds={filters.tagIds} onChange={next => patch({ tagIds: next })} />
+    </div>
+  {/if}
+
   <!-- Clear all -->
 
   <button
     type="button"
     onclick={clearAll}
     disabled={filterCount === 0}
-    class="text-xs text-muted-foreground hover:text-foreground transition-colors text-left mt-2 disabled:opacity-20"
+    class="text-xs text-muted-foreground inline-flex flex-row items-center gap-2 hover:text-foreground transition-colors text-left mt-2 disabled:opacity-25"
   >
     {#if filterCount === 0}
       <Funnel size={16} /> No filters selected...
